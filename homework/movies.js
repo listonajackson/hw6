@@ -5,6 +5,7 @@
 // your new key right away.
 
 // For this exercise, we'll be using the "now playing" API endpoint
+// let api_key = 64b336603289beb29503a81cc44e6dae
 // https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}&language=en-US
 
 // Note: image data returned by the API will only give you the filename;
@@ -17,6 +18,16 @@ window.addEventListener('DOMContentLoaded', async function(event) {
   // movies. Write the contents of this array to the JavaScript
   // console to ensure you've got good data
   // ⬇️ ⬇️ ⬇️
+    let url = 'https://api.themoviedb.org/3/movie/now_playing?api_key=64b336603289beb29503a81cc44e6dae&language=en-US'
+
+    let response = await fetch(url)
+    let movies = await response.json()
+    console.log(movies)
+
+    console.log(movies.results.length)
+
+    let movieList = movies.results
+    console.log(movieList.length)
 
   // ⬆️ ⬆️ ⬆️ 
   // End Step 1
@@ -24,7 +35,12 @@ window.addEventListener('DOMContentLoaded', async function(event) {
   // Step 2: 
   // - Loop through the Array called movies and insert HTML
   //   into the existing DOM element with the class name .movies
-  // - Include a "watched" button to click for each movie
+    
+      for (let i = 0; i<movieList.length; i++) {
+        let movieID = movieList[i].id
+        let moviePoster = movieList[i].poster_path
+ 
+        // - Include a "watched" button to click for each movie
   // - Give each "movie" a unique class name based on its numeric
   //   ID field.
   // Some HTML that would look pretty good... replace with real values :)
@@ -35,7 +51,20 @@ window.addEventListener('DOMContentLoaded', async function(event) {
   // ⬇️ ⬇️ ⬇️
 
   // ⬆️ ⬆️ ⬆️ 
+     
+       document.querySelector('.movies').insertAdjacentHTML('beforeend', `
+        <div class="w=1/5 p-4 movie-${movieID}">
+          <img src="https://image.tmdb.org/t/p/w500/${moviePoster}" class="w-full">
+          <a href='#' class="watched-button block text-center text-white bg-green-500 mt-4 px=4 py-2 rounded">I've watched this!</a>
+        </div>
+      `)
+      }  
   // End Step 2
+
+      document.querySelector('.watched-button').addEventListener('click', function(event) {
+        event.preventDefault()
+        document.querySelector('.movies').classList.add('opacity-20')
+      })
 
   // Step 3: 
   // - Attach an event listener to each "watched button"
